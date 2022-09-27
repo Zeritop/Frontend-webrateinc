@@ -1,14 +1,23 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { NavBar, Brand, Auth } from '../Styles/StylesNavbar'
+import Login from './Login';
 
-const Navbar = () => {
+const Navbar = ({log, setLog}) => {
+
+    const loggear = () => {
+        setLog(!log)
+    }
+
   return (
     <NavBar>
         <Brand>
             Encuestas RateInc
         </Brand>
         <Auth>
-            Login
+            <button
+                onClick={loggear}
+            >Login
+            </button>
         </Auth>
     </NavBar>
   )

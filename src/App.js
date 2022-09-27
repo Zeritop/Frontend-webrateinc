@@ -1,7 +1,7 @@
 import './App.css';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
-import { Container } from './Styles/StylesEncuesta';
+import { Container, Modal } from './Styles/StylesEncuesta';
 import { addEncuesta, getEncuesta } from './services/encuestaService';
 import { useState, useEffect } from 'react';
 
@@ -10,10 +10,15 @@ const App = () => {
   const [feed, setFeed] = useState('')
   const [enc, setEnc] = useState(null)
   const [load, setLoad] = useState(false)
+  const [log, setLog] = useState(false)
 
   useEffect(() => {
     Promise.all([getEncuesta()])
-      .then(values => setEnc(values))
+      .then(values => {
+        setEnc(values[0].data.encuesta)
+        setLoad(true)
+        console.log(values[0].data.encuesta)
+      })
   }, [])
  
   const botones = [0,1,2,3,4,5,6,7,8,9,10]
@@ -33,7 +38,14 @@ const App = () => {
   console.log(valorB, feed)
   return (
     <div className="App">
-      <Navbar />
+      {
+        log && (
+          <Modal>
+            <Login log={log} setLog={setLog}/>
+          </Modal>
+        )
+      } 
+      <Navbar log={log} setLog={setLog} />
       <Container>
         <h3>Encuesta</h3>
         <div>
@@ -61,9 +73,17 @@ const App = () => {
             <button>Aceptar</button>
           </form>
         </div>
-
+        <div>
+          {
+            load && enc.map(e => (
+              <h3>{e.valor}</h3>
+            ))
+          }
+        </div>
         
       </Container>
+
+      
     </div>
   );
 }
