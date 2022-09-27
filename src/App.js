@@ -2,13 +2,20 @@ import './App.css';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import { Container } from './Styles/StylesEncuesta';
-import { addEncuesta } from './services/encuestaService';
-import { useState } from 'react';
+import { addEncuesta, getEncuesta } from './services/encuestaService';
+import { useState, useEffect } from 'react';
 
 const App = () => {
   const [valorB, setValorB] = useState(0)
   const [feed, setFeed] = useState('')
+  const [enc, setEnc] = useState(null)
+  const [load, setLoad] = useState(false)
 
+  useEffect(() => {
+    Promise.all([getEncuesta()])
+      .then(values => setEnc(values))
+  }, [])
+ 
   const botones = [0,1,2,3,4,5,6,7,8,9,10]
 
   const votar = (data) => {
@@ -23,7 +30,7 @@ const App = () => {
     e.preventDefault()
     addEncuesta(valorB, feed, valorB)
   }
-
+  console.log(valorB, feed)
   return (
     <div className="App">
       <Navbar />
@@ -54,6 +61,8 @@ const App = () => {
             <button>Aceptar</button>
           </form>
         </div>
+
+        
       </Container>
     </div>
   );
